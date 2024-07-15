@@ -11,7 +11,7 @@ function InventoryList() {
       const token = localStorage.getItem('token');
       try {
         const response = await axios.get('http://localhost:5000/api/inventory/list', {
-          headers: { 'Authorization': token }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         setInventory(response.data);
       } catch (error) {
@@ -39,16 +39,22 @@ function InventoryList() {
         <thead>
           <tr>
             <th>Item Name</th>
-            <th>Quantity</th>
-            <th>Unit</th>
+            <th>Key</th>
+            <th>Stock Taken</th>
+            <th>Stock Remaining</th>
+            <th>Total Stock</th>
+            <th>Date/Time</th>
           </tr>
         </thead>
         <tbody>
           {inventory.map(item => (
             <tr key={item._id}>
               <td>{item.itemName}</td>
-              <td>{item.quantity}</td>
-              <td>{item.unit}</td>
+              <td>{item.key}</td>
+              <td>{item.stockTaken}</td>
+              <td>{item.stockRemaining}</td>
+              <td>{item.totalStock}</td>
+              <td>{new Date(item.dateTime).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
