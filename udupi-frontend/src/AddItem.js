@@ -3,34 +3,40 @@ import axios from 'axios';
 
 const AddItem = () => {
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleAddItem = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     const token = localStorage.getItem('token');
     try {
       await axios.post('http://localhost:5000/api/items/add', { name }, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': token }
       });
-      alert('Item name added');
+      setSuccess('Item name added');
+      setName('');
     } catch (error) {
       console.error('Adding item name failed:', error);
-      alert('Failed to add item name. Please try again.');
+      setError(error.response?.data || 'Failed to add item name. Please try again.');
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleAddItem}>
       <h2>Add Item Name</h2>
-      <form onSubmit={handleAddItem}>
-        <input
-          type="text"
-          placeholder="Item Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <button type="submit">Add Item</button>
-      </form>
-    </div>
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
+      <input
+        type="text"
+        placeholder="Item Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <button type="submit">Add Item</button>
+    </form>
   );
 };
 

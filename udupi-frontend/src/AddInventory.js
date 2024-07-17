@@ -12,8 +12,9 @@ const AddInventory = () => {
       const token = localStorage.getItem('token');
       try {
         const response = await axios.get('http://localhost:5000/api/items/list', {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: { 'Authorization': token }
         });
+        console.log('Fetched item names:', response.data);
         setItemNames(response.data);
       } catch (error) {
         console.error('Failed to fetch item names:', error);
@@ -28,7 +29,7 @@ const AddInventory = () => {
     const token = localStorage.getItem('token');
     try {
       await axios.post('http://localhost:5000/api/inventory/add', { itemName, stockTaken, totalStock }, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': token }
       });
       alert('Item added to inventory');
     } catch (error) {
@@ -38,7 +39,7 @@ const AddInventory = () => {
   };
 
   return (
-    <div>
+    <div className="center-text">
       <h2>Add Inventory Item</h2>
       <form onSubmit={handleAddItem}>
         <select value={itemName} onChange={(e) => setItemName(e.target.value)}>
